@@ -10,13 +10,14 @@ class Auth {
     return Promise.reject(`Ошибка: ${res.status}`);
   }
 
-  register (password, email) {
+  register ({ password, email }) {
+    console.log({ password, email })
     return fetch(`${this._BASE_URL}/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email: email, password: password }),
+      body: JSON.stringify({ password, email }),
     })
     .then(this._checkResponse);
   };
@@ -26,7 +27,7 @@ class Auth {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ password: password, email: email }),
+      body: JSON.stringify({ password, email }),
     })
       .then((response) => response.json())
       .then((data) => {

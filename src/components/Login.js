@@ -50,8 +50,8 @@ export default function Login(props) {
           maxLength="200"
         />
         <span className="auth__error password-error"></span>
+        <button className="auth__button" type="submit">Войти</button>
       </form>
-      <button className="auth__button" type="submit">Войти</button>
       <p className="auth__confirme"></p>
     </div>
   );

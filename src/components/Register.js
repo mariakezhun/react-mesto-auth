@@ -15,7 +15,7 @@ export default function Register(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    props.handleRegistrate({ email, password });
+    props.handleRegistrate({ password, email });
   }
 
   return (
@@ -50,10 +50,10 @@ export default function Register(props) {
           autoComplete="password"
         />
         <span className="auth__error password-error"></span>
-      </form>
-      <button className="auth__button" type="submit">
+        <button className="auth__button" type="submit">
         Зарегистрироваться
       </button>
+      </form>
       <p className="auth__confirme">Уже зарегистрированы?</p>{" "}
       <Link to="/signin" className="sign-in__link">
         Войти

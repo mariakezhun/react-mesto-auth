@@ -158,14 +158,16 @@ function App() {
 
   const handleLogin = (email, password) => {
     auth.authorize(email, password).then((res) => {
-      localStorage.setItem("jwt", res.token);
+      localStorage.setItem("jwt", res);
       setLoggedIn(true);
       navigate("/");
     });
   };
 
-  const handleRegistrate = (email, password) => {
-    auth.registrate(email, password).then(() => {
+  const handleRegistrate = ({password, email}) => {
+    console.log({ password, email })
+    auth.register({password, email}).then(() => {
+      
       navigate("/signin");
     });
   };
