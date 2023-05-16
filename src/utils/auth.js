@@ -31,8 +31,7 @@ class Auth {
       },
       body: JSON.stringify({ password, email }),
     })
-      .then((response) => response.json())
-      .catch((err) => console.log(err));
+    .then(this._checkResponse);
   }
   checkToken(token) {
     return fetch(`${this._BASE_URL}/users/me`, {

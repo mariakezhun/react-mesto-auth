@@ -19,7 +19,7 @@ export default function Login(props) {
 
   return (
     <div className="auth">
-      <form className="auth__form" onSubmit={handleSubmit} noValidate>
+      <form className="auth__form" onSubmit={handleSubmit}>
         <h2 className="auth__header">Вход</h2>
         <input
           className="auth__input"

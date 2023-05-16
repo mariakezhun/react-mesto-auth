@@ -42,7 +42,8 @@ function App() {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    api
+    if (loggedIn) {
+      api
       .getCards()
       .then((res) => {
         setCards(res);
@@ -58,7 +59,8 @@ function App() {
       .catch((err) => {
         console.error(err);
       });
-  }, []);
+    }
+  }, [loggedIn]);
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
@@ -159,6 +161,7 @@ function App() {
             if (res) {
               setLoggedIn(true);
               navigate("/");
+              setEmail(res.data.email)
             }
           })
           .catch((err) => {
@@ -185,8 +188,6 @@ function App() {
   };
 
   const handleRegistrate = (password, email) => {
-    // console.log('email' + " " + email);
-    // console.log('password' + " " + password);
     auth
       .register(password, email)
       .then((res) => {
