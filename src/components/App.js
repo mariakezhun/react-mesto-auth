@@ -166,8 +166,8 @@ function App() {
     }
   };
 
-  const handleLogin = (email, password) => {
-    auth.authorize(email, password).then((token) => {
+  const handleLogin = ({ password, email }) => {
+    auth.authorize({ password, email }).then((token) => {
       localStorage.setItem("token", token);
       setLoggedIn(true);
       navigate("/");
