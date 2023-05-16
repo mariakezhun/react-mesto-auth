@@ -139,35 +139,44 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setSelectedCard({ link: "", name: "" });
   };
-  
+
+
   React.useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
-      auth.checkToken(jwt)
-        .then((res) => {
-          if (res) {
-            setLoggedIn(true);
-            navigate('/', { replace: true })
-            setEmail(res.data.email);
-          }
-        })
-        .catch((err) => console.log(err))
+    tokenCheck();
+  }, [navigate]);
+
+  const tokenCheck = () => {
+    if (localStorage.getItem("token")) {
+      const token = localStorage.getItem("token");
+      console.log(token);
+
+      if (token) {
+        auth
+          .checkToken(token)
+          .then((res) => {
+            if (res) {
+              setLoggedIn(true);
+              navigate("/");
+            }
+          })
+          .catch((err) => {
+            console.log(`Ошибка: ${err}`);
+          });
+      }
     }
-  }, 
-  [navigate])
+  };
 
   const handleLogin = (email, password) => {
-    auth.authorize(email, password).then((res) => {
-      localStorage.setItem("jwt", res);
+    auth.authorize(email, password).then((token) => {
+      localStorage.setItem("token", token);
       setLoggedIn(true);
       navigate("/");
     });
   };
 
-  const handleRegistrate = ({password, email}) => {
-    console.log({ password, email })
-    auth.register({password, email}).then(() => {
-      
+  const handleRegistrate = ({ password, email }) => {
+    console.log({ password, email });
+    auth.register({ password, email }).then(() => {
       navigate("/signin");
     });
   };
@@ -183,7 +192,7 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="body">
         <div className="page">
-          <Header email={email} handleLogOut={handleLogOut}/>
+          <Header email={email} handleLogOut={handleLogOut} />
           <Routes>
             <Route
               path="/"
@@ -210,15 +219,6 @@ function App() {
               element={<Login handleLogin={handleLogin} />}
             />
           </Routes>
-          {/* <Main
-            onEditProfile={handleEditProfileClick}
-            onEditAvatar={handleEditAvatarClick}
-            onAddPlace={handleAddPlaceClick}
-            cards={cards}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}
-          /> */}
           <Footer />
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
