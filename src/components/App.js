@@ -9,11 +9,12 @@ import { api } from "../utils/api";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
-import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import Login from "./Login";
 import Register from "./Register";
 import { auth } from "../utils/auth";
+import InfoTooltip from "./InfoTooltip";
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({
@@ -35,6 +36,8 @@ function App() {
   const [cards, setCards] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [email, setEmail] = React.useState("");
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
+  const [statusTooltip, setStatusTooltip] = React.useState(false);
 
   const navigate = useNavigate();
 
@@ -138,21 +141,20 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setSelectedCard({ link: "", name: "" });
+    setIsInfoTooltipOpen(false);
   };
-
 
   React.useEffect(() => {
     tokenCheck();
   }, [navigate]);
 
   const tokenCheck = () => {
-    if (localStorage.getItem("token")) {
-      const token = localStorage.getItem("token");
-      console.log(token);
+    if (localStorage.getItem("jwt")) {
+      const jwt = localStorage.getItem("jwt");
 
-      if (token) {
+      if (jwt) {
         auth
-          .checkToken(token)
+          .checkToken(jwt)
           .then((res) => {
             if (res) {
               setLoggedIn(true);
@@ -166,25 +168,44 @@ function App() {
     }
   };
 
-  const handleLogin = ({ password, email }) => {
-    auth.authorize({ password, email }).then((token) => {
-      localStorage.setItem("token", token);
-      setLoggedIn(true);
-      navigate("/");
-    });
+  const handleLogin = (data) => {
+    auth
+      .authorize(data)
+      .then((res) => {
+        localStorage.setItem("jwt", res.token);
+        setLoggedIn(true);
+        setEmail(data.email)
+        navigate("/");
+      })
+      .catch((err) => {
+        setStatusTooltip(false)
+        setIsInfoTooltipOpen(true);
+        console.log(`Ошибка: ${err}`);
+      });
   };
 
-  const handleRegistrate = ({ password, email }) => {
-    console.log({ password, email });
-    auth.register({ password, email }).then(() => {
-      navigate("/signin");
-    });
+  const handleRegistrate = (password, email) => {
+    // console.log('email' + " " + email);
+    // console.log('password' + " " + password);
+    auth
+      .register(password, email)
+      .then((res) => {
+        localStorage.setItem("jwt", res.token);
+        navigate("/signin");
+        setStatusTooltip(true)
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+        setStatusTooltip(false)
+      }).finally(() => {
+        setIsInfoTooltipOpen(true);
+      })
   };
 
   function handleLogOut() {
     localStorage.removeItem("jwt");
     setLoggedIn(false);
-    setEmail("");
+    setEmail("")
     navigate("/signin");
   }
 
@@ -192,7 +213,7 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="body">
         <div className="page">
-          <Header email={email} handleLogOut={handleLogOut} />
+          <Header email={email} onSignOut={handleLogOut} />
           <Routes>
             <Route
               path="/"
@@ -236,6 +257,12 @@ function App() {
             onAddPlace={handleAddPlaceSubmit}
           />
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+          <InfoTooltip
+          name='info'
+          isOpen={isInfoTooltipOpen}
+          onClose={closeAllPopups}
+          statusTooltip={statusTooltip}
+        />
         </div>
       </div>
     </CurrentUserContext.Provider>

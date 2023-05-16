@@ -15,7 +15,7 @@ export default function Register(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    props.handleRegistrate({ password, email });
+    props.handleRegistrate( password, email );
   }
 
   return (
@@ -51,12 +51,11 @@ export default function Register(props) {
         />
         <span className="auth__error password-error"></span>
         <button className="auth__button" type="submit">
-        Зарегистрироваться
-      </button>
+          Зарегистрироваться
+        </button>
       </form>
-      <p className="auth__confirme">Уже зарегистрированы?</p>{" "}
-      <Link to="/signin" className="sign-in__link">
-        Войти
+      <Link to="/signin" className="auth__link">
+        Уже зарегистрированы? Войти
       </Link>
     </div>
   );

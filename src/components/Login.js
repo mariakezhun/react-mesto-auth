@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export default function Login(props) {
   const [email, setEmail] = React.useState("");
@@ -19,15 +19,12 @@ export default function Login(props) {
 
   return (
     <div className="auth">
-      <form
-        className="auth__form"
-        onSubmit={handleSubmit}
-        noValidate
-      >
+      <form className="auth__form" onSubmit={handleSubmit} noValidate>
         <h2 className="auth__header">Вход</h2>
         <input
           className="auth__input"
-          value={email} onChange={handleChangeEmail}
+          value={email}
+          onChange={handleChangeEmail}
           name="email"
           id="email"
           type="email"
@@ -50,9 +47,10 @@ export default function Login(props) {
           maxLength="200"
         />
         <span className="auth__error password-error"></span>
-        <button className="auth__button" type="submit">Войти</button>
+        <button className="auth__button" type="submit">
+          Войти
+        </button>
       </form>
-      <p className="auth__confirme"></p>
     </div>
   );
 }

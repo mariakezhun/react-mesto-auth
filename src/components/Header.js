@@ -6,7 +6,7 @@ export default function Header(props) {
     <header className="header">
       <img className="header__logo" src={logoPaht} alt="Логотип" />
       <div className="header__navbar">
-        {props.email && <p className="header__email">{props.email}</p>}
+        <p className="header__email">{props.email}</p>
         <Routes>
           <Route
             path="/signin"
@@ -14,7 +14,6 @@ export default function Header(props) {
               <Link
                 className="header__link"
                 to="/signup"
-                onClick={props.handleLogOut}
               >
                 Регистрация
               </Link>
@@ -34,7 +33,7 @@ export default function Header(props) {
             path="/"
             element={
               <Link
-                className="header__link"
+                className="header__link header__link_type_singout"
                 onClick={props.onSignOut}
                 to="/signin"
               >

@@ -1,4 +1,6 @@
-.auth{
-  width: 358px;
-  height: 27px;
+.auth {
+  max-width: 358px;
+  margin: 20px auto 0;
+  display: flex;
+  flex-direction: column;
 }

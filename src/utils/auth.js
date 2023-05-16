@@ -10,14 +10,17 @@ class Auth {
     return Promise.reject(`Ошибка: ${res.status}`);
   }
 
-  register({ password, email }) {
-    console.log({ password, email });
+  register(password, email) {
+    // console.log(password, email);
     return fetch(`${this._BASE_URL}/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ password, email }),
+      body: JSON.stringify({
+        password: password,
+        email: email,
+      }),
     }).then(this._checkResponse);
   }
   authorize({ password, email }) {
@@ -29,23 +32,16 @@ class Auth {
       body: JSON.stringify({ password, email }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        if (data.user) {
-          localStorage.setItem("token", data.token);
-          return data;
-        }
-      })
       .catch((err) => console.log(err));
   }
   checkToken(token) {
-    console.log(token);
     return fetch(`${this._BASE_URL}/users/me`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
-    }).then(this._checkResponse)
+    }).then(this._checkResponse);
   }
 }
 
